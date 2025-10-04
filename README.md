@@ -1,8 +1,8 @@
 # Projeto 1: Agenda Eletrônica (Back-End)
 
-[cite_start]Este é o repositório do **Projeto 1** da disciplina de **Programação Web Back-End (EC48B-C71)** [cite: 6][cite_start], da Universidade Tecnológica Federal do Paraná (UTFPR), Campus Cornélio Procópio[cite: 1, 2].
+Este é o repositório do **Projeto 1** da disciplina de **Programação Web Back-End (EC48B-C71)** , da Universidade Tecnológica Federal do Paraná (UTFPR), Campus Cornélio Procópio.
 
-[cite_start]O objetivo do projeto é desenvolver uma biblioteca de classes em Node.js para acesso e manipulação de um banco de dados, sem o uso de frameworks web como o Express.js[cite: 9]. O sistema foi desenvolvido como uma interface de linha de comando (CLI) interativa para gerenciar uma agenda eletrônica, permitindo o cadastro de usuários, categorias e eventos.
+O objetivo do projeto é desenvolver uma biblioteca de classes em Node.js para acesso e manipulação de um banco de dados, sem o uso de frameworks web como o Express.js. O sistema foi desenvolvido como uma interface de linha de comando (CLI) interativa para gerenciar uma agenda eletrônica, permitindo o cadastro de usuários, categorias e eventos.
 
 ---
 
@@ -33,10 +33,10 @@ A aplicação é uma interface de linha de comando (CLI) que permite gerenciar t
     * **Busca de eventos por período (dia/mês/ano)**.
 
 * **Requisitos da Disciplina Atendidos:**
-    * [cite_start]Implementação de no mínimo 3 classes de armazenamento (`Usuario`, `Categoria`, `Evento`). [cite: 26]
-    * [cite_start]Verificação de preenchimento de campos obrigatórios. [cite: 29]
-    * [cite_start]Tratamento de exceções. [cite: 30]
-    * [cite_start]Armazenamento de logs de erro em um arquivo (`/logs/exceptions.log`). [cite: 31]
+    *Implementação de no mínimo 3 classes de armazenamento (`Usuario`, `Categoria`, `Evento`).
+    *Verificação de preenchimento de campos obrigatórios.
+    *Tratamento de exceções.
+    *Armazenamento de logs de erro em um arquivo (`/logs/exceptions.log`).
 
 ---
 
