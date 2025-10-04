@@ -3,61 +3,97 @@ const { logError } = require('../utils/logger');
 const { ObjectId } = require('mongodb');
 
 class Evento {
-    constructor(titulo, data_inicio, descricao = '', data_fim = null, id_calendario) {
+    constructor(titulo, dataInicio, dataFim, usuarioId, categoriaId, descricao = '', local = '') {
         this.titulo = titulo;
-        this.data_inicio = data_inicio;
         this.descricao = descricao;
-        this.data_fim = data_fim;
-        this.id_calendario = id_calendario;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+        this.local = local;
+        this.usuarioId = new ObjectId(usuarioId);
+        this.categoriaId = new ObjectId(categoriaId);
+        this.criadoEm = new Date();
     }
 
-    // Método para validar campos obrigatórios
     validar() {
-        if (!this.titulo || !this.data_inicio) {
-            throw new Error("Campos obrigatórios (título e data de início) não foram preenchidos.");
+        if (!this.titulo || !this.dataInicio || !this.dataFim || !this.usuarioId || !this.categoriaId) {
+            throw new Error("Campos obrigatórios (título, datas, IDs de usuário e categoria) não foram preenchidos.");
+        }
+        if (this.dataInicio > this.dataFim) {
+            throw new Error("A data de início não pode ser posterior à data de fim.");
         }
         return true;
     }
 
-    // Método para salvar um evento no banco de dados
     async salvar() {
         try {
-            this.validar(); // Verificação de campos obrigatórios 
+            this.validar();
             const db = getDb();
-            const collection = db.collection('eventos');
-            const resultado = await collection.insertOne(this);
+            const resultado = await db.collection('eventos').insertOne(this);
             return resultado;
         } catch (error) {
-            logError(error); // Armazena a exceção em um arquivo de log 
-            throw new Error("Ocorreu um erro ao salvar o evento."); // Lança um erro genérico para a aplicação
+            logError(error);
+            throw new Error(`Ocorreu um erro ao salvar o evento: ${error.message}`);
         }
     }
 
-    // Método estático para buscar todos os eventos
     static async buscarTodos() {
         try {
             const db = getDb();
-            const collection = db.collection('eventos');
-            return await collection.find({}).toArray();
+            return await db.collection('eventos').find({}).toArray();
         } catch (error) {
-            logError(error); // Tratamento de exceções 
+            logError(error);
             throw new Error("Ocorreu um erro ao buscar os eventos.");
         }
     }
 
-    // Método estático para deletar um evento por ID
+    static async buscarPorUsuario(usuarioId) {
+        try {
+            const db = getDb();
+            return await db.collection('eventos').find({ usuarioId: new ObjectId(usuarioId) }).toArray();
+        } catch (error) {
+            logError(error);
+            throw new Error("Ocorreu um erro ao buscar eventos por usuário.");
+        }
+    }
+
+    static async buscarPorPeriodo(inicio, fim) {
+        try {
+            const db = getDb();
+            return await db.collection('eventos').find({
+                dataInicio: { $gte: new Date(inicio) },
+                dataFim: { $lte: new Date(fim) }
+            }).toArray();
+        } catch (error) {
+            logError(error);
+            throw new Error("Ocorreu um erro ao buscar eventos por período.");
+        }
+    }
+    
     static async deletarPorId(id) {
         try {
             const db = getDb();
-            const collection = db.collection('eventos');
-            const resultado = await collection.deleteOne({ _id: new ObjectId(id) });
+            const resultado = await db.collection('eventos').deleteOne({ _id: new ObjectId(id) });
             if (resultado.deletedCount === 0) {
                 throw new Error("Evento não encontrado para deleção.");
             }
             return resultado;
         } catch (error) {
             logError(error);
-            throw new Error("Ocorreu um erro ao deletar o evento.");
+            throw new Error(`Ocorreu um erro ao deletar o evento: ${error.message}`);
+        }
+    }
+    
+    static async atualizarPorId(id, novosDados) {
+        try {
+            const db = getDb();
+            const resultado = await db.collection('eventos').updateOne({ _id: new ObjectId(id) }, { $set: novosDados });
+            if (resultado.matchedCount === 0) {
+                throw new Error("Evento não encontrado para atualização.");
+            }
+            return resultado;
+        } catch (error) {
+            logError(error);
+            throw new Error(`Ocorreu um erro ao atualizar o evento: ${error.message}`);
         }
     }
 }
