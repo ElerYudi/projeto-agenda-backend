@@ -1,0 +1,6 @@
+2025-10-04T18:41:50.439Z - ERRO: Error: Campos obrigatórios (título e data de início) não foram preenchidos.
+    at Evento.validar (C:\projeto-agenda-backend\src\models\Evento.js:17:19)
+    at Evento.salvar (C:\projeto-agenda-backend\src\models\Evento.js:25:18)
+    at main (C:\projeto-agenda-backend\index.js:48:30)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
